@@ -13,6 +13,10 @@ if platform.system() == 'Darwin':
 
 project_id = os.environ.get("PROJECT_ID")
 bucket_name = os.environ.get("GCS_BUCKET_NAME")
+bucket_name_in = os.environ.get("GCS_BUCKET_NAME_IN")
+
+videos_dataset = 'Vtuber.videos'
+chatlog_dataset = 'livechatlog.chatlog'
 
 def get_bq_client():
     if platform.system() == 'Linux':
@@ -40,8 +44,8 @@ def load_videos():
         source_format=bigquery.SourceFormat.NEWLINE_DELIMITED_JSON,
     )
 
-    uri = 'gs://youtube-channel-videos-v2/videos_v2/*.json'
-    table_id = project_id + '.Vtuber.videos'
+    uri = 'gs://' + bucket_name_in '/videos_v2/*.json'
+    table_id = project_id + '.' + videos_dataset
     load_job = client.load_table_from_uri(
             uri, table_id, job_config = job_config
         )
@@ -69,8 +73,8 @@ def load_chatlogs():
         source_format=bigquery.SourceFormat.NEWLINE_DELIMITED_JSON,
     )
 
-    uri = 'gs://youtube-livechat-replay-log-v2/*'
-    table_id = project_id + '.livechatlog.chatlog'
+    uri = 'gs://' + bucket_name '/*'
+    table_id = project_id + '.' + chatlog_dataset
     load_job = client.load_table_from_uri(
             uri, table_id, job_config = job_config
         )

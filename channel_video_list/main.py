@@ -117,7 +117,7 @@ def main(request):
     else:
         if gcs_wrapper.check_gcs_file_exists(bucket_name, file_path):
             videos = gcs_wrapper.get_gcs_file_to_dictlist(bucket_name, file_path)
-            for videoinfo in videolist:
+            for videoinfo in videos:
                 if max_published_at < datetime.strptime(videoinfo['published_at'], '%Y-%m-%dT%H:%M:%SZ'):
                     max_published_at = datetime.strptime(videoinfo['published_at'], '%Y-%m-%dT%H:%M:%SZ')
         else:
